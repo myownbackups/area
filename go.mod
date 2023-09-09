@@ -1,4 +1,4 @@
-module gitee.com/baixudong/city
+module gitee.com/baixudong/area
 
 go 1.21.0
 
