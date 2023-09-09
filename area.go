@@ -1,4 +1,4 @@
-package city
+package area
 
 import (
 	"context"
@@ -44,34 +44,34 @@ func subCity(city string) string {
 	city = re.Sub("(.{2,})[市县州旗镇乡岛]$", "${1}", city)
 	return city
 }
-func subXian(xian string) string {
-	xian = re.Sub(`\s`, "", xian)
-	xian = re.Sub("(.{2,})新区$", "${1}", xian)
-	xian = re.Sub("(.{2,})[区市县州旗镇乡岛]$", "${1}", xian)
-	xian = re.Sub("(.{2,})?自治.*", "${1}", xian)
-	xian = re.Sub(`[\(（].+?[\)）]$`, "", xian)
-	return xian
+func subCounty(county string) string {
+	county = re.Sub(`\s`, "", county)
+	county = re.Sub("(.{2,})新区$", "${1}", county)
+	county = re.Sub("(.{2,})[区市县州旗镇乡岛]$", "${1}", county)
+	county = re.Sub("(.{2,})?自治.*", "${1}", county)
+	county = re.Sub(`[\(（].+?[\)）]$`, "", county)
+	return county
 }
 
 type Province struct {
-	Name     string `json:"name"`
-	Value    int64  `json:"value"`
-	subName  string
-	Children []City `json:"children"`
+	Name    string `json:"name"`
+	Value   any    `json:"value"`
+	subName string
+	Citys   []City `json:"citys"`
 }
 type City struct {
-	Name     string `json:"name"`
-	subName  string
-	Value    int64  `json:"value"`
-	Children []Xian `json:"children"`
-}
-type Xian struct {
 	Name    string `json:"name"`
 	subName string
-	Value   int64 `json:"value"`
+	Value   any      `json:"value"`
+	Countys []County `json:"countys"`
+}
+type County struct {
+	Name    string `json:"name"`
+	subName string
+	Value   any `json:"value"`
 }
 
-func GetCity(pre_ctx context.Context, file_name string) error {
+func SaveAreaData(pre_ctx context.Context, file_name string) error {
 	main_url := "http://www.tcmap.com.cn/list/jiancheng_list.html"
 	session, err := requests.NewClient(pre_ctx)
 	if err != nil {
@@ -117,27 +117,27 @@ func GetCity(pre_ctx context.Context, file_name string) error {
 			} else {
 				qcData.Add(provinceData.Name + cityData.Name)
 			}
-			Xians := []Xian{}
-			for _, xian := range strings.Split(province_tds[len(province_tds)-1].Text(), " ") {
-				xian = re.Sub(`\s`, "", xian)
-				if xian == "" {
+			Countys := []County{}
+			for _, county := range strings.Split(province_tds[len(province_tds)-1].Text(), " ") {
+				county = re.Sub(`\s`, "", county)
+				if county == "" {
 					continue
 				}
 				valueNum++
-				var xianData Xian
-				xianData.Name = xian
-				xianData.Value = valueNum
-				if qcData.Has(provinceData.Name + cityData.Name + xianData.Name) {
+				var countyData County
+				countyData.Name = county
+				countyData.Value = valueNum
+				if qcData.Has(provinceData.Name + cityData.Name + countyData.Name) {
 					continue
 				} else {
-					qcData.Add(provinceData.Name + cityData.Name + xianData.Name)
+					qcData.Add(provinceData.Name + cityData.Name + countyData.Name)
 				}
-				Xians = append(Xians, xianData)
+				Countys = append(Countys, countyData)
 			}
-			cityData.Children = Xians
+			cityData.Countys = Countys
 			Citys = append(Citys, cityData)
 		}
-		provinceData.Children = Citys
+		provinceData.Citys = Citys
 		Provinces = append(Provinces, provinceData)
 	}
 	content, err := json.Marshal(Provinces)
@@ -152,14 +152,14 @@ type Client struct {
 	option ClientOption
 }
 
-//go:embed city.json
-var city_content []byte
+//go:embed areaCode.json
+var areaContent []byte
 
 type ClientOption struct {
 	Datas       []Province
 	SubProvince bool
 	SubCity     bool
-	SubXian     bool
+	SubCounty   bool
 }
 
 // 根据映射表创建客户端
@@ -174,22 +174,22 @@ func newClient(option ClientOption) *Client {
 				option.Datas[provinceIndex].subName = province2
 			}
 		}
-		for cityIndex, city := range province.Children {
+		for cityIndex, city := range province.Citys {
 			city_tree.Add(city.Name)
 			if option.SubCity {
 				city2 := subCity(city.Name)
 				if city2 != city.Name && city2 != "" {
 					city_tree.Add(city2)
-					option.Datas[provinceIndex].Children[cityIndex].subName = city2
+					option.Datas[provinceIndex].Citys[cityIndex].subName = city2
 				}
 			}
-			for xianIndex, xian := range city.Children {
-				city_tree.Add(xian.Name)
-				if option.SubXian {
-					xian2 := subXian(xian.Name)
-					if xian2 != xian.Name && xian2 != "" {
-						city_tree.Add(xian2)
-						option.Datas[provinceIndex].Children[cityIndex].Children[xianIndex].subName = xian2
+			for countyIndex, county := range city.Countys {
+				city_tree.Add(county.Name)
+				if option.SubCounty {
+					county2 := subCounty(county.Name)
+					if county2 != county.Name && county2 != "" {
+						city_tree.Add(county2)
+						option.Datas[provinceIndex].Citys[cityIndex].Countys[countyIndex].subName = county2
 					}
 				}
 			}
@@ -204,7 +204,7 @@ func NewClient(options ...ClientOption) *Client {
 		return newClient(options[0])
 	}
 	var data []Province
-	err := json.Unmarshal(city_content, &data)
+	err := json.Unmarshal(areaContent, &data)
 	if err != nil {
 		return nil
 	}
@@ -212,7 +212,7 @@ func NewClient(options ...ClientOption) *Client {
 		Datas:       data,
 		SubProvince: true,
 		SubCity:     true,
-		SubXian:     true,
+		SubCounty:   true,
 	})
 }
 
@@ -225,8 +225,8 @@ func (obj *Client) getSearchData(searchData map[string]int) []*Node {
 		provinceCount := searchData[province.Name]
 		provinceCount2 := searchData[province.subName]
 		var haveCity bool
-		var haveXian2 bool
-		for _, city := range province.Children {
+		var haveCounty2 bool
+		for _, city := range province.Citys {
 			cityCount := searchData[city.Name]
 			cityCount2 := searchData[city.subName]
 			if city.Name == province.Name {
@@ -237,45 +237,45 @@ func (obj *Client) getSearchData(searchData map[string]int) []*Node {
 				cityCount2 = 0
 				cityCount2, provinceCount2 = provinceCount2, cityCount2
 			}
-			var haveXian bool
-			for _, xian := range city.Children {
-				xianCount := searchData[xian.Name]
-				xianCount2 := searchData[xian.subName]
-				if xian.Name == city.Name {
-					xianCount = 0
-					cityCount, xianCount = xianCount, cityCount
+			var haveCounty bool
+			for _, county := range city.Countys {
+				countyCount := searchData[county.Name]
+				countyCount2 := searchData[county.subName]
+				if county.Name == city.Name {
+					countyCount = 0
+					cityCount, countyCount = countyCount, cityCount
 				}
-				if xian.subName == city.subName {
-					xianCount2 = 0
-					cityCount2, xianCount2 = xianCount2, cityCount2
+				if county.subName == city.subName {
+					countyCount2 = 0
+					cityCount2, countyCount2 = countyCount2, cityCount2
 				}
-				if xianCount+xianCount2 > 0 {
-					haveXian = true
-					haveXian2 = true
+				if countyCount+countyCount2 > 0 {
+					haveCounty = true
+					haveCounty2 = true
 					results = append(results, &Node{
 						Province: province.Name,
 						City:     city.Name,
-						Xian:     xian.Name,
+						County:   county.Name,
 
 						subProvince: province.subName,
 						subCity:     city.subName,
-						subXian:     xian.subName,
+						subCounty:   county.subName,
 
 						ProvinceValue: province.Value,
 						CityValue:     city.Value,
-						XianValue:     xian.Value,
+						CountyValue:   county.Value,
 
 						provinceSize: provinceCount,
 						citySize:     cityCount,
-						xianSize:     xianCount,
+						Countysize:   countyCount,
 
 						subProvinceSize: provinceCount2,
 						subCitySize:     cityCount2,
-						subXianSize:     xianCount2,
+						subCountysize:   countyCount2,
 					})
 				}
 			}
-			if !haveXian && cityCount+cityCount2 > 0 {
+			if !haveCounty && cityCount+cityCount2 > 0 {
 				haveCity = true
 				results = append(results, &Node{
 					Province: province.Name,
@@ -296,7 +296,7 @@ func (obj *Client) getSearchData(searchData map[string]int) []*Node {
 
 			}
 		}
-		if !haveCity && !haveXian2 && provinceCount+provinceCount2 > 0 {
+		if !haveCity && !haveCounty2 && provinceCount+provinceCount2 > 0 {
 			haveCity = true
 			results = append(results, &Node{
 				subProvince: province.subName,
@@ -330,30 +330,30 @@ func (obj *Client) getSearchData(searchData map[string]int) []*Node {
 type Node struct {
 	Province string //省
 	City     string //市
-	Xian     string //县
+	County   string //县
 
 	subProvince string //省
 	subCity     string //市
-	subXian     string //县
+	subCounty   string //县
 
-	ProvinceValue int64
-	CityValue     int64
-	XianValue     int64
+	ProvinceValue any
+	CityValue     any
+	CountyValue   any
 
 	provinceSize int
 	citySize     int
-	xianSize     int
+	Countysize   int
 
 	subProvinceSize int
 	subCitySize     int
-	subXianSize     int
+	subCountysize   int
 }
 
 func (obj Node) score1() int {
-	if obj.provinceSize > 0 && obj.citySize > 0 && obj.xianSize > 0 {
+	if obj.provinceSize > 0 && obj.citySize > 0 && obj.Countysize > 0 {
 		return 10
 	}
-	if obj.subProvinceSize > 0 && obj.subCitySize > 0 && obj.subXianSize > 0 {
+	if obj.subProvinceSize > 0 && obj.subCitySize > 0 && obj.subCountysize > 0 {
 		return 9
 	}
 	if obj.provinceSize > 0 && obj.citySize > 0 {
@@ -362,17 +362,17 @@ func (obj Node) score1() int {
 	if obj.subProvinceSize > 0 && obj.subCitySize > 0 {
 		return 7
 	}
-	if obj.citySize > 0 && obj.xianSize > 0 {
+	if obj.citySize > 0 && obj.Countysize > 0 {
 		return 7
 	}
-	if obj.subCitySize > 0 && obj.subXianSize > 0 {
+	if obj.subCitySize > 0 && obj.subCountysize > 0 {
 		return 6
 	}
 
-	if obj.provinceSize > 0 && obj.xianSize > 0 {
+	if obj.provinceSize > 0 && obj.Countysize > 0 {
 		return 6
 	}
-	if obj.subProvinceSize > 0 && obj.subXianSize > 0 {
+	if obj.subProvinceSize > 0 && obj.subCountysize > 0 {
 		return 5
 	}
 
@@ -382,7 +382,7 @@ func (obj Node) score1() int {
 	if obj.citySize > 0 {
 		return 4
 	}
-	if obj.xianSize > 0 {
+	if obj.Countysize > 0 {
 		return 3
 	}
 
@@ -392,16 +392,16 @@ func (obj Node) score1() int {
 	if obj.subCitySize > 0 {
 		return 3
 	}
-	if obj.subXianSize > 0 {
+	if obj.subCountysize > 0 {
 		return 2
 	}
 	return 0
 }
 func (obj Node) score2() int {
-	return obj.provinceSize*7 + obj.citySize*3 + obj.xianSize
+	return obj.provinceSize*7 + obj.citySize*3 + obj.Countysize
 }
 func (obj Node) score3() int {
-	return obj.subProvinceSize*7 + obj.subCitySize*3 + obj.subXianSize
+	return obj.subProvinceSize*7 + obj.subCitySize*3 + obj.subCountysize
 }
 
 // 返回所有可能
