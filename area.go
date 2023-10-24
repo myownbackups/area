@@ -8,10 +8,10 @@ import (
 	"sort"
 	"strings"
 
-	"gitee.com/baixudong/kinds"
-	"gitee.com/baixudong/re"
-	"gitee.com/baixudong/requests"
 	"gitee.com/baixudong/tree"
+	"github.com/gospider007/kinds"
+	"github.com/gospider007/re"
+	"github.com/gospider007/requests"
 )
 
 func subProvince(province string) string {
