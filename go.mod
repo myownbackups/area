@@ -25,7 +25,7 @@ require (
 	github.com/gospider007/tools v0.0.0-20231015122431-2acd695704d6 // indirect
 	github.com/gospider007/websocket v0.0.0-20231021032557-2e1e47d58b54 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/compress v1.17.1 // indirect
+	github.com/klauspost/compress v1.17.2 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/quic-go/quic-go v0.39.1 // indirect
