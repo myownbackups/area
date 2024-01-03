@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/gospider007/kinds"
+	"github.com/gospider007/gson"
 	"github.com/gospider007/re"
 	"github.com/gospider007/requests"
 	"github.com/gospider007/tree"
@@ -72,79 +72,14 @@ type County struct {
 }
 
 func SaveAreaData(pre_ctx context.Context, file_name string) error {
-	main_url := "http://www.tcmap.com.cn/list/jiancheng_list.html"
-	session, err := requests.NewClient(pre_ctx)
+	resp, err := requests.Get(pre_ctx, "https://geo.datav.aliyun.com/areas_v3/bound/all.json")
 	if err != nil {
 		return err
 	}
-	main_a, _ := session.Request(pre_ctx, "GET", main_url)
-	main_html := main_a.Html()
-	main_trs := main_html.Find("div[id=page_left] table").Finds("tr")
-	var valueNum int64
-	qcData := kinds.NewSet[string]()
-	Provinces := []Province{}
-	for _, main_tr := range main_trs {
-		province := re.Sub(`\s`, "", main_tr.Finds("td")[1].Text())
-		if province == "" {
-			continue
-		}
-		valueNum++
-		var provinceData Province
-		provinceData.Name = province
-		provinceData.Value = valueNum
-		if qcData.Has(provinceData.Name) {
-			continue
-		} else {
-			qcData.Add(provinceData.Name)
-		}
-		province_url := "http://www.tcmap.com.cn" + main_tr.Find("a").Get("href")
-		province_a, _ := session.Request(pre_ctx, "GET", province_url)
-		province_html := province_a.Html()
-		province_trs := province_html.Find("div[id=page_left]>table").Finds("tr")
-		Citys := []City{}
-		for _, province_tr := range province_trs {
-			province_tds := province_tr.Finds("td")
-			city := re.Sub(`\s`, "", province_tds[0].Text())
-			if city == "" {
-				continue
-			}
-			valueNum++
-			var cityData City
-			cityData.Name = city
-			cityData.Value = valueNum
-			if qcData.Has(provinceData.Name + cityData.Name) {
-				continue
-			} else {
-				qcData.Add(provinceData.Name + cityData.Name)
-			}
-			Countys := []County{}
-			for _, county := range strings.Split(province_tds[len(province_tds)-1].Text(), " ") {
-				county = re.Sub(`\s`, "", county)
-				if county == "" {
-					continue
-				}
-				valueNum++
-				var countyData County
-				countyData.Name = county
-				countyData.Value = valueNum
-				if qcData.Has(provinceData.Name + cityData.Name + countyData.Name) {
-					continue
-				} else {
-					qcData.Add(provinceData.Name + cityData.Name + countyData.Name)
-				}
-				Countys = append(Countys, countyData)
-			}
-			cityData.Countys = Countys
-			Citys = append(Citys, cityData)
-		}
-		provinceData.Citys = Citys
-		Provinces = append(Provinces, provinceData)
-	}
-	content, err := json.Marshal(Provinces)
-	if err != nil {
+	if _, err = resp.Json(); err != nil {
 		return err
 	}
-	return os.WriteFile(file_name, content, 0777)
+	return os.WriteFile(file_name, resp.Content(), 0777)
 }
 
 type Client struct {
@@ -196,6 +131,74 @@ func newClient(option ClientOption) *Client {
 		}
 	}
 	return &Client{option: option, tree: city_tree}
+}
+
+type adcode struct {
+	name   string
+	adcode int64
+	parent int64
+}
+
+func GetDefaultArea() []Province {
+	jsonData, err := gson.Decode(areaContent)
+	if err != nil {
+		return nil
+	}
+	provinces := []adcode{}
+	citys := []adcode{}
+	xians := []adcode{}
+	for _, ll := range jsonData.Array() {
+		level := ll.Get("level").String()
+		switch level {
+		case "province":
+			provinces = append(provinces, adcode{
+				name:   ll.Get("name").String(),
+				adcode: ll.Get("adcode").Int(),
+				parent: ll.Get("parent").Int(),
+			})
+		case "city":
+			citys = append(citys, adcode{
+				name:   ll.Get("name").String(),
+				adcode: ll.Get("adcode").Int(),
+				parent: ll.Get("parent").Int(),
+			})
+		case "district":
+			xians = append(xians, adcode{
+				name:   ll.Get("name").String(),
+				adcode: ll.Get("adcode").Int(),
+				parent: ll.Get("parent").Int(),
+			})
+
+		}
+	}
+	results := []Province{}
+	for _, province := range provinces {
+		p := Province{
+			Name:  province.name,
+			Value: province.adcode,
+			Citys: []City{},
+		}
+		for _, city := range citys {
+			if city.parent == province.adcode {
+				c := City{
+					Name:    city.name,
+					Value:   city.adcode,
+					Countys: []County{},
+				}
+				for _, xian := range xians {
+					if xian.parent == city.adcode {
+						c.Countys = append(c.Countys, County{
+							Name:  xian.name,
+							Value: xian.adcode,
+						})
+					}
+				}
+				p.Citys = append(p.Citys, c)
+			}
+		}
+		results = append(results, p)
+	}
+	return results
 }
 
 // 创建根据映射关系创建默认的客户端
