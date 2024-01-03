@@ -3,7 +3,6 @@ package area
 import (
 	"context"
 	_ "embed"
-	"encoding/json"
 	"os"
 	"sort"
 	"strings"
@@ -139,7 +138,7 @@ type adcode struct {
 	parent int64
 }
 
-func GetDefaultArea() []Province {
+func getDefaultArea() []Province {
 	jsonData, err := gson.Decode(areaContent)
 	if err != nil {
 		return nil
@@ -206,9 +205,8 @@ func NewClient(options ...ClientOption) *Client {
 	if len(options) > 0 {
 		return newClient(options[0])
 	}
-	var data []Province
-	err := json.Unmarshal(areaContent, &data)
-	if err != nil {
+	data := getDefaultArea()
+	if data == nil {
 		return nil
 	}
 	return newClient(ClientOption{
