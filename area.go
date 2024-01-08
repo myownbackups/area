@@ -446,11 +446,33 @@ func (obj *Client) Searchs(txt string) []*Node {
 }
 
 // 返回分数最大的结果
-func (obj *Client) Search(txt string) *Node {
-	rs := obj.Searchs(txt)
-	if len(rs) > 0 {
-		return rs[0]
-	} else {
+func (obj *Client) Search(txts ...string) *Node {
+	if len(txts) == 0 {
 		return nil
 	}
+	if len(txts) == 1 {
+		rs := obj.Searchs(txts[0])
+		if len(rs) > 0 {
+			return rs[0]
+		} else {
+			return nil
+		}
+	}
+	var mustNode *Node
+	for _, txt := range txts {
+		nodes := obj.Searchs(txt)
+		if len(nodes) > 0 {
+			if mustNode == nil {
+				mustNode = nodes[0]
+			} else {
+				for _, node := range nodes {
+					if node.Province == mustNode.Province {
+						mustNode = node
+						break
+					}
+				}
+			}
+		}
+	}
+	return mustNode
 }
