@@ -474,6 +474,9 @@ func (obj *Client) Search(txts ...string) *Node {
 					}
 				}
 			}
+			if mustNode.County != "" {
+				return mustNode
+			}
 		}
 	}
 	return mustNode
