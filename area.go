@@ -459,8 +459,10 @@ func (obj *Client) Search(txts ...string) *Node {
 		}
 	}
 	var mustNode *Node
+	allTxt := ""
 	for _, txt := range txts {
-		nodes := obj.Searchs(txt)
+		allTxt += txt
+		nodes := obj.Searchs(allTxt)
 		if len(nodes) > 0 {
 			if mustNode == nil {
 				mustNode = nodes[0]
