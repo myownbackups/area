@@ -447,17 +447,6 @@ func (obj *Client) Searchs(txt string) []*Node {
 
 // 返回分数最大的结果
 func (obj *Client) Search(txts ...string) *Node {
-	if len(txts) == 0 {
-		return nil
-	}
-	if len(txts) == 1 {
-		rs := obj.Searchs(txts[0])
-		if len(rs) > 0 {
-			return rs[0]
-		} else {
-			return nil
-		}
-	}
 	var mustNode *Node
 	allTxt := ""
 	for _, txt := range txts {
@@ -480,4 +469,56 @@ func (obj *Client) Search(txts ...string) *Node {
 		}
 	}
 	return mustNode
+}
+
+// 返回分数最大的结果
+func (obj *Client) ParseValue(provinceVale, cityVale, countyVale any) *Node {
+	if provinceVale == nil && cityVale == nil && countyVale == nil {
+		return nil
+	}
+	for _, province := range obj.option.Datas {
+		if province.Value == provinceVale || provinceVale == nil {
+			for _, city := range province.Citys {
+				if city.Value == cityVale || cityVale == nil {
+					for _, county := range city.Countys {
+						if county.Value == countyVale {
+							return &Node{
+								Province: province.Name,
+								City:     city.Name,
+								County:   county.Name,
+
+								ProvinceValue: province.Value,
+								CityValue:     city.Value,
+								CountyValue:   county.Value,
+
+								subProvince: province.subName,
+								subCity:     city.subName,
+								subCounty:   county.subName,
+							}
+						}
+					}
+					if city.Value == cityVale {
+						return &Node{
+							Province: province.Name,
+							City:     city.Name,
+
+							ProvinceValue: province.Value,
+							CityValue:     city.Value,
+
+							subProvince: province.subName,
+							subCity:     city.subName,
+						}
+					}
+				}
+			}
+			if province.Value == provinceVale {
+				return &Node{
+					Province:      province.Name,
+					ProvinceValue: province.Value,
+					subProvince:   province.subName,
+				}
+			}
+		}
+	}
+	return nil
 }
