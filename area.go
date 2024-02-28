@@ -456,17 +456,34 @@ func (obj *Client) Search(txts ...string) *Node {
 			if mustNode == nil {
 				mustNode = nodes[0]
 			} else {
-				for _, node := range nodes {
-					if node.Province == mustNode.Province {
-						mustNode = node
-						break
-					}
-				}
-			}
-			if mustNode.County != "" {
-				return mustNode
+				mustNode = obj.manySearch(mustNode, nodes)
 			}
 		}
+	}
+	if mustNode.provinceSize == 0 && mustNode.citySize == 0 && mustNode.subProvinceSize == 0 && mustNode.subCitySize == 0 {
+		return nil
+	}
+	return mustNode
+}
+func (obj *Client) manySearch(mustNode *Node, nodes []*Node) *Node {
+	if mustNode.provinceSize == 0 && mustNode.citySize == 0 && mustNode.subProvinceSize == 0 && mustNode.subCitySize == 0 {
+		for _, node := range nodes {
+			if mustNode.provinceSize != 0 || mustNode.citySize != 0 || mustNode.subProvinceSize != 0 || mustNode.subCitySize != 0 {
+				return node
+			}
+		}
+	}
+	for _, node := range nodes {
+		if mustNode.Province != "" && mustNode.Province != node.Province {
+			continue
+		}
+		if mustNode.City != "" && mustNode.City != node.City {
+			continue
+		}
+		if mustNode.County != "" && mustNode.County != node.County {
+			continue
+		}
+		return node
 	}
 	return mustNode
 }
