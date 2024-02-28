@@ -460,7 +460,7 @@ func (obj *Client) Search(txts ...string) *Node {
 			}
 		}
 	}
-	if mustNode.provinceSize == 0 && mustNode.citySize == 0 && mustNode.subProvinceSize == 0 && mustNode.subCitySize == 0 {
+	if mustNode != nil && mustNode.provinceSize == 0 && mustNode.citySize == 0 && mustNode.subProvinceSize == 0 && mustNode.subCitySize == 0 {
 		return nil
 	}
 	return mustNode
