@@ -460,15 +460,15 @@ func (obj *Client) Search(txts ...string) *Node {
 			}
 		}
 	}
-	if mustNode != nil && mustNode.provinceSize == 0 && mustNode.citySize == 0 && mustNode.subProvinceSize == 0 && mustNode.subCitySize == 0 {
+	if mustNode != nil && mustNode.provinceSize == 0 && mustNode.citySize == 0 && mustNode.countySize == 0 && mustNode.subProvinceSize == 0 && mustNode.subCitySize == 0 {
 		return nil
 	}
 	return mustNode
 }
 func (obj *Client) manySearch(mustNode *Node, nodes []*Node) *Node {
-	if mustNode.provinceSize == 0 && mustNode.citySize == 0 && mustNode.subProvinceSize == 0 && mustNode.subCitySize == 0 {
+	if mustNode.provinceSize == 0 && mustNode.citySize == 0 && mustNode.countySize == 0 && mustNode.subProvinceSize == 0 && mustNode.subCitySize == 0 {
 		for _, node := range nodes {
-			if node.provinceSize != 0 || node.citySize != 0 || node.subProvinceSize != 0 || node.subCitySize != 0 {
+			if node.provinceSize != 0 || node.citySize != 0 || node.countySize != 0 || node.subProvinceSize != 0 || node.subCitySize != 0 {
 				return node
 			}
 		}
