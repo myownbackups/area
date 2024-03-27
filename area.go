@@ -460,9 +460,6 @@ func (obj *Client) Search(txts ...string) *Node {
 			}
 		}
 	}
-	if mustNode != nil && mustNode.provinceSize == 0 && mustNode.citySize == 0 && mustNode.countySize == 0 && mustNode.subProvinceSize == 0 && mustNode.subCitySize == 0 {
-		return nil
-	}
 	return mustNode
 }
 func (obj *Client) manySearch(mustNode *Node, nodes []*Node) *Node {
