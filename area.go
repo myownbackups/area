@@ -537,3 +537,6 @@ func (obj *Client) ParseValue(provinceVale, cityVale, countyVale any) *Node {
 	}
 	return nil
 }
+func (obj *Client) Provinces() []Province {
+	return obj.option.Datas
+}
