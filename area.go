@@ -266,13 +266,13 @@ func (obj *Client) getSearchData(searchData map[string]int) []*Node {
 						CityValue:     city.Value,
 						CountyValue:   county.Value,
 
-						provinceSize: provinceCount,
-						citySize:     cityCount,
-						countySize:   countyCount,
+						ProvinceSize: provinceCount,
+						CitySize:     cityCount,
+						CountySize:   countyCount,
 
-						subProvinceSize: provinceCount2,
-						subCitySize:     cityCount2,
-						subCountySize:   countyCount2,
+						SubProvinceSize: provinceCount2,
+						SubCitySize:     cityCount2,
+						SubCountySize:   countyCount2,
 					})
 				}
 			}
@@ -288,11 +288,11 @@ func (obj *Client) getSearchData(searchData map[string]int) []*Node {
 					ProvinceValue: province.Value,
 					CityValue:     city.Value,
 
-					provinceSize: provinceCount,
-					citySize:     cityCount,
+					ProvinceSize: provinceCount,
+					CitySize:     cityCount,
 
-					subProvinceSize: provinceCount2,
-					subCitySize:     cityCount2,
+					SubProvinceSize: provinceCount2,
+					SubCitySize:     cityCount2,
 				})
 
 			}
@@ -304,8 +304,8 @@ func (obj *Client) getSearchData(searchData map[string]int) []*Node {
 				Province:    province.Name,
 
 				ProvinceValue:   province.Value,
-				provinceSize:    provinceCount,
-				subProvinceSize: provinceCount2,
+				ProvinceSize:    provinceCount,
+				SubProvinceSize: provinceCount2,
 			})
 		}
 	}
@@ -345,68 +345,68 @@ type Node struct {
 	subCity     string //市
 	subCounty   string //县
 
-	provinceSize int
-	citySize     int
-	countySize   int
+	ProvinceSize int
+	CitySize     int
+	CountySize   int
 
-	subProvinceSize int
-	subCitySize     int
-	subCountySize   int
+	SubProvinceSize int
+	SubCitySize     int
+	SubCountySize   int
 }
 
 func (obj Node) score1() int {
-	if obj.provinceSize > 0 && obj.citySize > 0 && obj.countySize > 0 {
+	if obj.ProvinceSize > 0 && obj.CitySize > 0 && obj.CountySize > 0 {
 		return 10
 	}
-	if obj.subProvinceSize > 0 && obj.subCitySize > 0 && obj.subCountySize > 0 {
+	if obj.SubProvinceSize > 0 && obj.SubCitySize > 0 && obj.SubCountySize > 0 {
 		return 9
 	}
-	if obj.provinceSize > 0 && obj.citySize > 0 {
+	if obj.ProvinceSize > 0 && obj.CitySize > 0 {
 		return 8
 	}
-	if obj.subProvinceSize > 0 && obj.subCitySize > 0 {
+	if obj.SubProvinceSize > 0 && obj.SubCitySize > 0 {
 		return 7
 	}
-	if obj.citySize > 0 && obj.countySize > 0 {
+	if obj.CitySize > 0 && obj.CountySize > 0 {
 		return 7
 	}
-	if obj.subCitySize > 0 && obj.subCountySize > 0 {
+	if obj.SubCitySize > 0 && obj.SubCountySize > 0 {
 		return 6
 	}
 
-	if obj.provinceSize > 0 && obj.countySize > 0 {
+	if obj.ProvinceSize > 0 && obj.CountySize > 0 {
 		return 6
 	}
-	if obj.subProvinceSize > 0 && obj.subCountySize > 0 {
+	if obj.SubProvinceSize > 0 && obj.SubCountySize > 0 {
 		return 5
 	}
 
-	if obj.provinceSize > 0 {
+	if obj.ProvinceSize > 0 {
 		return 5
 	}
-	if obj.citySize > 0 {
+	if obj.CitySize > 0 {
 		return 4
 	}
-	if obj.countySize > 0 {
+	if obj.CountySize > 0 {
 		return 3
 	}
 
-	if obj.subProvinceSize > 0 {
+	if obj.SubProvinceSize > 0 {
 		return 4
 	}
-	if obj.subCitySize > 0 {
+	if obj.SubCitySize > 0 {
 		return 3
 	}
-	if obj.subCountySize > 0 {
+	if obj.SubCountySize > 0 {
 		return 2
 	}
 	return 0
 }
 func (obj Node) score2() int {
-	return obj.provinceSize*7 + obj.citySize*3 + obj.countySize
+	return obj.ProvinceSize*7 + obj.CitySize*3 + obj.CountySize
 }
 func (obj Node) score3() int {
-	return obj.subProvinceSize*7 + obj.subCitySize*3 + obj.subCountySize
+	return obj.SubProvinceSize*7 + obj.SubCitySize*3 + obj.SubCountySize
 }
 func (obj Node) score4() int {
 	score := 0
@@ -464,9 +464,9 @@ func (obj *Client) Search(txts ...string) *Node {
 }
 
 func (obj *Client) manySearch(mustNode *Node, nodes []*Node) *Node {
-	if mustNode.provinceSize == 0 && mustNode.citySize == 0 && mustNode.countySize == 0 && mustNode.subProvinceSize == 0 && mustNode.subCitySize == 0 {
+	if mustNode.ProvinceSize == 0 && mustNode.CitySize == 0 && mustNode.CountySize == 0 && mustNode.SubProvinceSize == 0 && mustNode.SubCitySize == 0 {
 		for _, node := range nodes {
-			if node.provinceSize != 0 || node.citySize != 0 || node.countySize != 0 || node.subProvinceSize != 0 || node.subCitySize != 0 {
+			if node.ProvinceSize != 0 || node.CitySize != 0 || node.CountySize != 0 || node.SubProvinceSize != 0 || node.SubCitySize != 0 {
 				return node
 			}
 		}
