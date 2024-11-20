@@ -13,7 +13,7 @@ import (
 	"github.com/gospider007/tree"
 )
 
-func subProvince(province string) string {
+func SubProvince(province string) string {
 	province = re.Sub(`市|省|\s`, "", province)
 	if strings.Contains(province, "香港") {
 		province = "香港"
@@ -38,12 +38,12 @@ func subProvince(province string) string {
 	}
 	return province
 }
-func subCity(city string) string {
+func SubCity(city string) string {
 	city = re.Sub(`\s`, "", city)
 	city = re.Sub("(.{2,})[市县州旗镇乡岛]$", "${1}", city)
 	return city
 }
-func subCounty(county string) string {
+func SubCounty(county string) string {
 	county = re.Sub(`\s`, "", county)
 	county = re.Sub("(.{2,})新区$", "${1}", county)
 	county = re.Sub("(.{2,})[区市县州旗镇乡岛]$", "${1}", county)
@@ -102,7 +102,7 @@ func newClient(option ClientOption) *Client {
 	for provinceIndex, province := range option.Datas {
 		city_tree.Add(province.Name)
 		if option.SubProvince {
-			province2 := subProvince(province.Name)
+			province2 := SubProvince(province.Name)
 			if province2 != province.Name && province2 != "" {
 				city_tree.Add(province2)
 				option.Datas[provinceIndex].subName = province2
@@ -111,7 +111,7 @@ func newClient(option ClientOption) *Client {
 		for cityIndex, city := range province.Citys {
 			city_tree.Add(city.Name)
 			if option.SubCity {
-				city2 := subCity(city.Name)
+				city2 := SubCity(city.Name)
 				if city2 != city.Name && city2 != "" {
 					city_tree.Add(city2)
 					option.Datas[provinceIndex].Citys[cityIndex].subName = city2
@@ -120,7 +120,7 @@ func newClient(option ClientOption) *Client {
 			for countyIndex, county := range city.Countys {
 				city_tree.Add(county.Name)
 				if option.SubCounty {
-					county2 := subCounty(county.Name)
+					county2 := SubCounty(county.Name)
 					if county2 != county.Name && county2 != "" {
 						city_tree.Add(county2)
 						option.Datas[provinceIndex].Citys[cityIndex].Countys[countyIndex].subName = county2
@@ -258,9 +258,9 @@ func (obj *Client) getSearchData(searchData map[string]int) []*Node {
 						City:     city.Name,
 						County:   county.Name,
 
-						subProvince: province.subName,
-						subCity:     city.subName,
-						subCounty:   county.subName,
+						SubProvince: province.subName,
+						SubCity:     city.subName,
+						SubCounty:   county.subName,
 
 						ProvinceValue: province.Value,
 						CityValue:     city.Value,
@@ -282,8 +282,8 @@ func (obj *Client) getSearchData(searchData map[string]int) []*Node {
 					Province: province.Name,
 					City:     city.Name,
 
-					subProvince: province.subName,
-					subCity:     city.subName,
+					SubProvince: province.subName,
+					SubCity:     city.subName,
 
 					ProvinceValue: province.Value,
 					CityValue:     city.Value,
@@ -300,7 +300,7 @@ func (obj *Client) getSearchData(searchData map[string]int) []*Node {
 		if !haveCity && !haveCounty2 && provinceCount+provinceCount2 > 0 {
 			haveCity = true
 			results = append(results, &Node{
-				subProvince: province.subName,
+				SubProvince: province.subName,
 				Province:    province.Name,
 
 				ProvinceValue:   province.Value,
@@ -341,9 +341,9 @@ type Node struct {
 	CityValue     any
 	CountyValue   any
 
-	subProvince string //省
-	subCity     string //市
-	subCounty   string //县
+	SubProvince string //省
+	SubCity     string //市
+	SubCounty   string //县
 
 	ProvinceSize int
 	CitySize     int
@@ -506,9 +506,9 @@ func (obj *Client) ParseValue(provinceVale, cityVale, countyVale any) *Node {
 								CityValue:     city.Value,
 								CountyValue:   county.Value,
 
-								subProvince: province.subName,
-								subCity:     city.subName,
-								subCounty:   county.subName,
+								SubProvince: province.subName,
+								SubCity:     city.subName,
+								SubCounty:   county.subName,
 							}
 						}
 					}
@@ -520,8 +520,8 @@ func (obj *Client) ParseValue(provinceVale, cityVale, countyVale any) *Node {
 							ProvinceValue: province.Value,
 							CityValue:     city.Value,
 
-							subProvince: province.subName,
-							subCity:     city.subName,
+							SubProvince: province.subName,
+							SubCity:     city.subName,
 						}
 					}
 				}
@@ -530,7 +530,7 @@ func (obj *Client) ParseValue(provinceVale, cityVale, countyVale any) *Node {
 				return &Node{
 					Province:      province.Name,
 					ProvinceValue: province.Value,
-					subProvince:   province.subName,
+					SubProvince:   province.subName,
 				}
 			}
 		}
