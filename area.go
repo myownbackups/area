@@ -309,7 +309,7 @@ func (obj *Client) getSearchData(searchData map[string]int) []*Node {
 			})
 		}
 	}
-	sort.Slice(results, func(i, j int) bool {
+	sort.SliceStable(results, func(i, j int) bool {
 		node := results[i]
 		node2 := results[j]
 
