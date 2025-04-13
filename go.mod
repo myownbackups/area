@@ -3,15 +3,15 @@ module github.com/gospider007/area
 go 1.24.0
 
 require (
-	github.com/gospider007/gson v0.0.0-20241216122450-fb66d0ba2a07
-	github.com/gospider007/re v0.0.0-20240227100911-e27255e48eff
-	github.com/gospider007/requests v0.0.0-20241216132213-207dfc792c1b
-	github.com/gospider007/tree v0.0.0-20241216132053-c41721c55f50
+	github.com/gospider007/gson v0.0.0-20250409021518-dfa9c69256f1
+	github.com/gospider007/re v0.0.0-20250217075352-bcb79f285d6c
+	github.com/gospider007/requests v0.0.0-20250410142043-c8596b09bc03
+	github.com/gospider007/tree v0.0.0-20250409022003-bc955f79e7e3
 )
 
 require (
-	github.com/PuerkitoBio/goquery v1.10.2 // indirect
-	github.com/STARRY-S/zip v0.2.2 // indirect
+	github.com/PuerkitoBio/goquery v1.10.3 // indirect
+	github.com/STARRY-S/zip v0.2.3 // indirect
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/andybalholm/cascadia v1.3.3 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
@@ -19,25 +19,26 @@ require (
 	github.com/bodgit/windows v1.0.1 // indirect
 	github.com/caddyserver/certmagic v0.22.2 // indirect
 	github.com/caddyserver/zerossl v0.1.3 // indirect
-	github.com/cloudflare/circl v1.6.0 // indirect
-	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
+	github.com/cloudflare/circl v1.6.1 // indirect
 	github.com/dsnet/compress v0.0.2-0.20230904184137-39efe44ab707 // indirect
 	github.com/gaukas/clienthellod v0.4.2 // indirect
 	github.com/gaukas/godicttls v0.0.4 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
+	github.com/gobwas/httphead v0.1.0 // indirect
+	github.com/gobwas/pool v0.2.1 // indirect
+	github.com/gobwas/ws v1.4.0 // indirect
 	github.com/google/gopacket v1.1.19 // indirect
-	github.com/google/pprof v0.0.0-20250317173921-a4b03ec1a45e // indirect
-	github.com/gorilla/websocket v1.5.3 // indirect
-	github.com/gospider007/bar v0.0.0-20241205091858-06f3c7e16dd9 // indirect
-	github.com/gospider007/blog v0.0.0-20241205091827-6bcaf48620d4 // indirect
-	github.com/gospider007/bs4 v0.0.0-20241216122612-aa3f29179e6f // indirect
-	github.com/gospider007/gtls v0.0.0-20241216053748-dc1a232bb017 // indirect
-	github.com/gospider007/http2 v0.0.0-20241216122734-aa1047df028c // indirect
-	github.com/gospider007/http3 v0.0.0-20241215120136-980caa047c47 // indirect
-	github.com/gospider007/ja3 v0.0.0-20241216123149-83352be79439 // indirect
-	github.com/gospider007/kinds v0.0.0-20240929092451-8f867acde255 // indirect
-	github.com/gospider007/tools v0.0.0-20241120013952-ff42051bfc9f // indirect
-	github.com/gospider007/websocket v0.0.0-20241216130619-89829336d9a6 // indirect
+	github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 // indirect
+	github.com/gospider007/bar v0.0.0-20250217074946-47896d8de2ba // indirect
+	github.com/gospider007/blog v0.0.0-20250302134054-8afc12c2a9a7 // indirect
+	github.com/gospider007/bs4 v0.0.0-20250409021338-18729cbd832a // indirect
+	github.com/gospider007/gtls v0.0.0-20250409021630-08bdcf90778d // indirect
+	github.com/gospider007/http2 v0.0.0-20250409021646-238ac72824c0 // indirect
+	github.com/gospider007/http3 v0.0.0-20250409021651-9176d957e585 // indirect
+	github.com/gospider007/ja3 v0.0.0-20250409021701-f6d59c72dc32 // indirect
+	github.com/gospider007/kinds v0.0.0-20250217075226-10f199f7215d // indirect
+	github.com/gospider007/tools v0.0.0-20250413024541-d6fc8f3bf399 // indirect
+	github.com/gospider007/websocket v0.0.0-20250409022011-08b717d237a9 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
@@ -47,14 +48,14 @@ require (
 	github.com/klauspost/pgzip v1.2.6 // indirect
 	github.com/libdns/libdns v0.2.3 // indirect
 	github.com/mholt/acmez/v3 v3.1.1 // indirect
-	github.com/mholt/archives v0.1.0 // indirect
-	github.com/miekg/dns v1.1.64 // indirect
+	github.com/mholt/archives v0.1.1 // indirect
+	github.com/miekg/dns v1.1.65 // indirect
+	github.com/minio/minlz v1.0.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/nwaples/rardecode/v2 v2.1.1 // indirect
-	github.com/onsi/ginkgo/v2 v2.23.3 // indirect
+	github.com/onsi/ginkgo/v2 v2.23.4 // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
-	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/quic-go/qpack v0.5.1 // indirect
 	github.com/quic-go/quic-go v0.50.1 // indirect
 	github.com/refraction-networking/uquic v0.0.6 // indirect
@@ -68,20 +69,20 @@ require (
 	github.com/ulikunitz/xz v0.5.12 // indirect
 	github.com/zeebo/blake3 v0.2.4 // indirect
 	go.mongodb.org/mongo-driver v1.17.3 // indirect
-	go.uber.org/mock v0.5.0 // indirect
+	go.uber.org/automaxprocs v1.6.0 // indirect
+	go.uber.org/mock v0.5.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	go.uber.org/zap/exp v0.3.0 // indirect
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
-	golang.org/x/crypto v0.36.0 // indirect
-	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
-	golang.org/x/image v0.25.0 // indirect
+	golang.org/x/crypto v0.37.0 // indirect
+	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
+	golang.org/x/image v0.26.0 // indirect
 	golang.org/x/mod v0.24.0 // indirect
-	golang.org/x/net v0.38.0 // indirect
-	golang.org/x/sync v0.12.0 // indirect
-	golang.org/x/sys v0.31.0 // indirect
-	golang.org/x/text v0.23.0 // indirect
-	golang.org/x/time v0.9.0 // indirect
-	golang.org/x/tools v0.31.0 // indirect
-	google.golang.org/protobuf v1.36.5 // indirect
+	golang.org/x/net v0.39.0 // indirect
+	golang.org/x/sync v0.13.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/text v0.24.0 // indirect
+	golang.org/x/tools v0.32.0 // indirect
+	gopkg.in/errgo.v2 v2.1.0 // indirect
 )
