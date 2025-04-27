@@ -3,10 +3,10 @@ module github.com/gospider007/area
 go 1.24.0
 
 require (
-	github.com/gospider007/gson v0.0.0-20250409021518-dfa9c69256f1
+	github.com/gospider007/gson v0.0.0-20250413121440-c0f3162075f1
 	github.com/gospider007/re v0.0.0-20250217075352-bcb79f285d6c
-	github.com/gospider007/requests v0.0.0-20250410142043-c8596b09bc03
-	github.com/gospider007/tree v0.0.0-20250409022003-bc955f79e7e3
+	github.com/gospider007/requests v0.0.0-20250424100003-fe89e213eb8a
+	github.com/gospider007/tree v0.0.0-20250413121714-e2086550fec3
 )
 
 require (
@@ -15,9 +15,9 @@ require (
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/andybalholm/cascadia v1.3.3 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
-	github.com/bodgit/sevenzip v1.6.0 // indirect
+	github.com/bodgit/sevenzip v1.6.1 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
-	github.com/caddyserver/certmagic v0.22.2 // indirect
+	github.com/caddyserver/certmagic v0.23.0 // indirect
 	github.com/caddyserver/zerossl v0.1.3 // indirect
 	github.com/cloudflare/circl v1.6.1 // indirect
 	github.com/dsnet/compress v0.0.2-0.20230904184137-39efe44ab707 // indirect
@@ -28,26 +28,24 @@ require (
 	github.com/gobwas/pool v0.2.1 // indirect
 	github.com/gobwas/ws v1.4.0 // indirect
 	github.com/google/gopacket v1.1.19 // indirect
-	github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 // indirect
+	github.com/google/pprof v0.0.0-20250423184734-337e5dd93bb4 // indirect
 	github.com/gospider007/bar v0.0.0-20250217074946-47896d8de2ba // indirect
 	github.com/gospider007/blog v0.0.0-20250302134054-8afc12c2a9a7 // indirect
-	github.com/gospider007/bs4 v0.0.0-20250409021338-18729cbd832a // indirect
-	github.com/gospider007/gtls v0.0.0-20250409021630-08bdcf90778d // indirect
-	github.com/gospider007/http2 v0.0.0-20250409021646-238ac72824c0 // indirect
-	github.com/gospider007/http3 v0.0.0-20250409021651-9176d957e585 // indirect
-	github.com/gospider007/ja3 v0.0.0-20250409021701-f6d59c72dc32 // indirect
+	github.com/gospider007/bs4 v0.0.0-20250413121342-fed910fb00c9 // indirect
+	github.com/gospider007/gtls v0.0.0-20250413121446-8fb2185cc7b9 // indirect
+	github.com/gospider007/http2 v0.0.0-20250416094504-9e1519e1a2f4 // indirect
+	github.com/gospider007/http3 v0.0.0-20250416085920-b642f3f91f47 // indirect
+	github.com/gospider007/ja3 v0.0.0-20250427082442-f7dc5fb959e6 // indirect
 	github.com/gospider007/kinds v0.0.0-20250217075226-10f199f7215d // indirect
-	github.com/gospider007/tools v0.0.0-20250413024541-d6fc8f3bf399 // indirect
-	github.com/gospider007/websocket v0.0.0-20250409022011-08b717d237a9 // indirect
-	github.com/hashicorp/errwrap v1.1.0 // indirect
-	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/gospider007/tools v0.0.0-20250413121648-446528a36c44 // indirect
+	github.com/gospider007/websocket v0.0.0-20250413121724-a23319f2af52 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
 	github.com/klauspost/pgzip v1.2.6 // indirect
-	github.com/libdns/libdns v0.2.3 // indirect
-	github.com/mholt/acmez/v3 v3.1.1 // indirect
+	github.com/libdns/libdns v1.0.0-beta.1 // indirect
+	github.com/mholt/acmez/v3 v3.1.2 // indirect
 	github.com/mholt/archives v0.1.1 // indirect
 	github.com/miekg/dns v1.1.65 // indirect
 	github.com/minio/minlz v1.0.0 // indirect
@@ -57,10 +55,11 @@ require (
 	github.com/onsi/ginkgo/v2 v2.23.4 // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
 	github.com/quic-go/qpack v0.5.1 // indirect
-	github.com/quic-go/quic-go v0.50.1 // indirect
+	github.com/quic-go/quic-go v0.51.0 // indirect
 	github.com/refraction-networking/uquic v0.0.6 // indirect
-	github.com/refraction-networking/utls v1.6.7 // indirect
+	github.com/refraction-networking/utls v1.7.1 // indirect
 	github.com/sorairolake/lzip-go v0.3.7 // indirect
+	github.com/spf13/afero v1.14.0 // indirect
 	github.com/therootcompany/xz v1.0.1 // indirect
 	github.com/tidwall/gjson v1.18.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
