@@ -1,6 +1,6 @@
 module github.com/gospider007/area
 
-go 1.24.0
+go 1.25
 
 require (
 	github.com/gospider007/gson v0.0.0-20250413121440-c0f3162075f1
