@@ -442,7 +442,21 @@ func (obj Node) score4() int {
 
 // 返回所有可能
 func (obj *Client) Searchs(txt string) []*Node {
-	return obj.getSearchData(obj.tree.Search(re.Sub(`\s|北京时间`, "", txt)))
+	datas := obj.tree.Search(re.Sub(`\s|北京时间`, "", txt))
+	datas2 := map[string]int{}
+	for key, val := range datas {
+		runs := []rune(key)
+		switch len(runs) {
+		case 0, 1:
+		case 2:
+			if string(runs[1]) != "区" {
+				datas2[key] = val
+			}
+		default:
+			datas2[key] = val
+		}
+	}
+	return obj.getSearchData(datas2)
 }
 
 // 返回分数最大的结果
