@@ -309,27 +309,14 @@ func (obj *Client) getSearchData(searchData map[string]int) []*Node {
 			})
 		}
 	}
-	sort.SliceStable(results, func(i, j int) bool {
-		node := results[i]
-		node2 := results[j]
-
-		socre := node.score1()
-		socre2 := node2.score1()
-		if socre == socre2 {
-			socre = node.score2()
-			socre2 = node2.score2()
-			if socre == socre2 {
-				socre = node.score3()
-				socre2 = node2.score3()
-				if socre == socre2 {
-					socre = node.score4()
-					socre2 = node2.score4()
-				}
-			}
-		}
-		return socre > socre2
-	})
-	return results
+	return sortNodes(results)
+}
+func sortNodes(nodes []*Node) []*Node {
+	if len(nodes) == 0 {
+		return nodes
+	}
+	sort.SliceStable(nodes, func(i, j int) bool { return nodes[i].score() > nodes[j].score() })
+	return nodes
 }
 
 type Node struct {
@@ -354,90 +341,21 @@ type Node struct {
 	SubCountySize   int
 }
 
-func (obj Node) score1() int {
-	if obj.ProvinceSize > 0 && obj.CitySize > 0 && obj.CountySize > 0 {
-		return 10
-	}
-	if obj.SubProvinceSize > 0 && obj.SubCitySize > 0 && obj.SubCountySize > 0 {
-		return 9
-	}
-	if obj.ProvinceSize > 0 && obj.CitySize > 0 {
-		return 8
-	}
-	if obj.SubProvinceSize > 0 && obj.SubCitySize > 0 {
-		return 7
-	}
-	if obj.CitySize > 0 && obj.CountySize > 0 {
-		return 7
-	}
-	if obj.SubCitySize > 0 && obj.SubCountySize > 0 {
-		return 6
-	}
-
-	if obj.ProvinceSize > 0 && obj.CountySize > 0 {
-		return 6
-	}
-	if obj.SubProvinceSize > 0 && obj.SubCountySize > 0 {
-		return 5
-	}
-
-	if obj.ProvinceSize > 0 {
-		return 5
-	}
-	if obj.CitySize > 0 {
-		return 4
-	}
-	if obj.CountySize > 0 {
-		return 3
-	}
-
-	if obj.SubProvinceSize > 0 {
-		return 4
-	}
-	if obj.SubCitySize > 0 {
-		return 3
-	}
-	if obj.SubCountySize > 0 {
-		return 2
-	}
-	return 0
-}
-func (obj Node) score2() int {
-	return obj.ProvinceSize*7 + obj.CitySize*3 + obj.CountySize
-}
-func (obj Node) score3() int {
-	return obj.SubProvinceSize*7 + obj.SubCitySize*3 + obj.SubCountySize
-}
-func (obj Node) score4() int {
-	score := 0
+func (obj Node) score() int {
+	provinceBase := 1
+	cityBase := 1
+	countyBase := 1
 	if strings.HasSuffix(obj.Province, "省") {
-		score += 24
-	} else if strings.HasSuffix(obj.Province, "市") {
-		score += 12
-	} else if strings.HasSuffix(obj.Province, "县") {
-		score += 6
-	} else if strings.HasSuffix(obj.Province, "区") {
-		score += 2
+		provinceBase = 3
 	}
-	if strings.HasSuffix(obj.City, "省") {
-		score += 24
-	} else if strings.HasSuffix(obj.City, "市") {
-		score += 12
-	} else if strings.HasSuffix(obj.City, "县") {
-		score += 6
-	} else if strings.HasSuffix(obj.City, "区") {
-		score += 2
+	if strings.HasSuffix(obj.City, "市") {
+		cityBase = 3
 	}
-	if strings.HasSuffix(obj.County, "省") {
-		score += 24
-	} else if strings.HasSuffix(obj.County, "市") {
-		score += 12
-	} else if strings.HasSuffix(obj.County, "县") {
-		score += 6
-	} else if strings.HasSuffix(obj.County, "区") {
-		score += 2
+	if strings.HasSuffix(obj.County, "县") || strings.HasSuffix(obj.County, "区") {
+		countyBase = 3
 	}
-	return score
+	return obj.ProvinceSize*900*provinceBase + obj.CitySize*300*cityBase + obj.CountySize*100*countyBase +
+		obj.SubProvinceSize*200 + obj.SubCitySize*100 + obj.SubCountySize*50
 }
 
 // 返回所有可能
@@ -461,20 +379,21 @@ func (obj *Client) Searchs(txt string) []*Node {
 
 // 返回分数最大的结果
 func (obj *Client) Search(txts ...string) *Node {
-	var mustNode *Node
+	i := len(txts)
+	if i == 0 {
+		return nil
+	}
 	allTxt := ""
-	for _, txt := range txts {
-		allTxt += txt
-		nodes := obj.Searchs(allTxt)
-		if len(nodes) > 0 && (nodes[0].ProvinceSize > 0 || nodes[0].SubProvinceSize > 0) {
-			if mustNode == nil {
-				mustNode = nodes[0]
-			} else {
-				mustNode = obj.manySearch(mustNode, nodes)
-			}
+	for j, txt := range txts {
+		for k := (i - j - 1) * 3; k >= 0; k-- {
+			allTxt += txt
 		}
 	}
-	return mustNode
+	nodes := obj.Searchs(allTxt)
+	if len(nodes) > 0 {
+		return nodes[0]
+	}
+	return nil
 }
 
 func (obj *Client) manySearch(mustNode *Node, nodes []*Node) *Node {
