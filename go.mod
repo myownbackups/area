@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/gospider007/gson v0.0.0-20260620150125-dae0181045d2
 	github.com/gospider007/re v0.0.0-20260227072205-6223d82a3dab
-	github.com/gospider007/requests v0.0.0-20260629061251-be1aa995a124
+	github.com/gospider007/requests v0.0.0-20260629061347-2ecbe2042333
 	github.com/gospider007/tree v0.0.0-20260620150125-110defc17be6
 )
 
@@ -35,7 +35,7 @@ require (
 	github.com/gospider007/http3 v0.0.0-20260629061247-25316e808ca9 // indirect
 	github.com/gospider007/ja3 v0.0.0-20260629061105-e764ad4de5cd // indirect
 	github.com/gospider007/kinds v0.0.0-20260211060834-06a10e2431d8 // indirect
-	github.com/gospider007/netx v0.0.0-20260629061249-6fb28885d994 // indirect
+	github.com/gospider007/netx v0.0.0-20260629061343-e86287e3d480 // indirect
 	github.com/gospider007/tools v0.0.0-20260620145938-6b8c82109b5f // indirect
 	github.com/gospider007/websocket v0.0.0-20260623034800-fd7589fb75dd // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
