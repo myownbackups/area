@@ -39,7 +39,7 @@ require (
 	github.com/gospider007/netx v0.0.0-20260715091231-038ed16d3615 // indirect
 	github.com/gospider007/thread v0.0.0-20260715073649-94b15f3ca99e // indirect
 	github.com/gospider007/tools v0.0.0-20260715090848-9caf3c974ea0 // indirect
-	github.com/gospider007/websocket v0.0.0-20260715091118-f019c46d783d // indirect
+	github.com/gospider007/websocket v0.0.0-20260716014654-2e7cf03a1f00 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.19.0 // indirect
